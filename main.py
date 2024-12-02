@@ -1,57 +1,43 @@
+# Código extraído del link: https://github.com/SyedMuhammadMuhsinKarim/Bond-Energy-Algorithm/blob/master/README.md
+
 import numpy as np
-query_attr = np.array([[1, 0, 1, 0], 
-                       [0, 1, 1, 0], 
-                       [0, 1, 0, 1], 
-                       [0, 0, 1, 1]])
-query_access = np.array([[15, 20, 10], 
-                         [5, 0, 0], 
-                         [25, 25, 25], 
-                         [3, 0, 0]])
-aa_matrix = np.zeros((4,4))
 
-def position_checker(positions):
-  aa_elem = []
-  for j in positions[0]:
-    aa_elem.append(np.sum(query_access[j:j+1, :]))
-  aa_matrix[i,k] = sum(aa_elem)
+# Solicitar matrices iniciales al usuario
+def solicitar_matriz(nombre):
+    print(f"Ingrese la matriz {nombre} (separando los elementos por espacios y las filas por saltos de línea):")
+    matriz = []
+    while True:
+        fila = input()
+        if fila == "":
+            break
+        matriz.append(list(map(int, fila.split())))
+    return np.array(matriz)
 
-def dot_prod(vec_a, vec_b):
-  return np.dot(vec_a.flatten(), vec_b.flatten())
+# Calcular la matriz de afinidad
+def calcular_matriz_afinidad(query_attr, query_access):
+    num_atributos = query_attr.shape[1]
+    aa_matrix = np.zeros((num_atributos, num_atributos))
+    
+    for i in range(num_atributos):
+        for j in range(num_atributos):
+            if i == j:  # Diagonal principal: afinidad de un atributo consigo mismo
+                consultas_con_attr = np.where(query_attr[:, i] == 1)[0]
+                aa_matrix[i, j] = np.sum(query_access[consultas_con_attr, :])
+            else:  # Afinidad entre atributos distintos
+                consultas_con_both_attrs = np.where((query_attr[:, i] == 1) & (query_attr[:, j] == 1))[0]
+                aa_matrix[i, j] = np.sum(query_access[consultas_con_both_attrs, :])
+    
+    return aa_matrix
 
-## AA_MARIX GENERATION
-for i in range(4):
-  for k in range(4):
-    if i == k:
-      attr = query_attr[:, k:k+1].flatten()
-      positions = np.where(attr == 1)
-      position_checker(positions)
-    else:
-      attr_i = query_attr[:, i:i+1].flatten()
-      attr_k = query_attr[:, k:k+1].flatten()
-      positions = np.where((attr_i == 1) & (attr_k == 1))
-      position_checker(positions)
+# Main program para generar las matrices
+if __name__ == "__main__":
+    # Solicitar matrices de uso y acceso
+    query_attr = solicitar_matriz("de uso")
 
-# BOND ENERGY ALGORITHM - GET INITIAL CC_MATRIX
-cc_matrix = aa_matrix[:, :2]
-cc_matrix = np.append(np.zeros((4,1)), cc_matrix, axis=1)
-cc_matrix = np.append(cc_matrix,np.zeros((4,1)), axis=1)
+    query_access = solicitar_matriz("de acceso")
 
-# BOND ENERGY ALGORITHM - CC_MATRIX GENERATION
-for k in range(2, len(aa_matrix)):
-  i, j = 0, 1
-  get_values = []
-  while j < cc_matrix.shape[1]:
-    print(i,k,j, len(cc_matrix))
-    get_values.append(2 * dot_prod(cc_matrix[:, i:i+1], aa_matrix[:, k:k+1]) + 
-                      2 * dot_prod(aa_matrix[:, k:k+1], cc_matrix[:, j:j+1]) - 
-                      2 * dot_prod(cc_matrix[:, i:i+1], cc_matrix[:, j:j+1]))  
-    i = j
-    j+=1
-  pos = np.argmax(get_values) + 1
-  cc_matrix = np.insert(cc_matrix, pos, aa_matrix[k:k+1], axis=1)
+    # Generar la matriz de afinidad
+    aa_matrix = calcular_matriz_afinidad(query_attr, query_access)
 
-# BOND ENERGY ALGORITHM - REMOVES ZEROS COLUMNS
-cc_matrix = np.delete(cc_matrix, 0, axis=1)
-cc_matrix = np.delete(cc_matrix, cc_matrix.shape[1]-1, axis=1)
-
-print(cc_matrix)
+    print("\nMatriz de Afinidad (AA) generada:")
+    print(aa_matrix)
