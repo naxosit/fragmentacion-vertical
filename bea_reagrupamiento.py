@@ -12,12 +12,10 @@ def bea_algorithm(A):
     n, m = A.shape  # n: filas, m: columnas
     CA = np.zeros((n, m))  # Inicializar CA con ceros
     used_columns = [False] * m  # Rastrear columnas usadas
-    column_order = []  # Para rastrear el orden de selección de columnas
 
     # Paso 1: Elegir la primera columna y colocarla en CA
     CA[:, 0] = A[:, 0]  # Fijando la primera columna
     used_columns[0] = True
-    column_order.append(0)  # Agregar el índice de la columna seleccionada
 
     for i in range(1, m):  # Iterar para el resto de las columnas
         best_contribution = -np.inf
@@ -38,16 +36,13 @@ def bea_algorithm(A):
         # Colocar la mejor columna en CA
         CA[:, best_position + 1] = A[:, best_column_index]
         used_columns[best_column_index] = True
-        column_order.append(best_column_index)  # Agregar el índice de la columna seleccionada
 
-    # Reorganizar las filas en base al orden de las columnas seleccionadas
-    CA_reorganized = CA.copy()
-    for new_index, old_index in enumerate(column_order):
-        CA_reorganized[:, new_index] = CA[:, old_index]
-
-    return CA_reorganized
+    return CA
 
 # Ejemplo de uso:
+# AA es una matriz de afinidad que deberías definir antes de llamar a bea_algorithm.
+# CA_resultante = bea_algorithm(AA)
+# Definir la matriz AA
 AA = np.array([[45, 0, 45, 0],
                [0, 80, 5, 75],
                [45, 5, 53, 3],
