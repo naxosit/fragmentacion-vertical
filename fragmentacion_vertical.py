@@ -32,10 +32,9 @@ def calcular_matriz_afinidad(query_attr, query_access, acceso_ejecucion):
 # Main program para generar las matrices
 if __name__ == "__main__":
     # Solicitar matrices de uso y acceso
-    print("\nPor favor, ingrese la matriz de uso de atributos (query_attr):")
     query_attr = solicitar_matriz("de uso")
 
-    print("\nPor favor, ingrese la matriz de acceso por consultas y sitios (query_access):")
+    
     query_access = solicitar_matriz("de acceso")
 
     # Solicitar el valor de acceso/ejecución
