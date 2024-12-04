@@ -29,23 +29,6 @@ def calcular_matriz_afinidad(query_attr, query_access, acceso_ejecucion):
     
     return aa_matrix
 
-# Main program para generar las matrices
-if __name__ == "__main__":
-    # Solicitar matrices de uso y acceso
-    query_attr = solicitar_matriz("de uso")
-
-    
-    query_access = solicitar_matriz("de acceso")
-
-    # Solicitar el valor de acceso/ejecución
-    acceso_ejecucion = float(input("\nIngrese el valor de acceso/ejecución: "))
-
-    # Generar la matriz de afinidad
-    aa_matrix = calcular_matriz_afinidad(query_attr, query_access, acceso_ejecucion)
-
-    print("\nMatriz de Afinidad (AA) generada:")
-    print(aa_matrix)
-
 # Uniremos el otro código para que se ejecute en el mismo script
 
 def bond(Ax, Ay, A):
@@ -87,14 +70,27 @@ def bea_algorithm(A):
 
     return CA
 
-# Ejemplo de uso:
-# AA es una matriz de afinidad que deberías definir antes de llamar a bea_algorithm.
-# CA_resultante = bea_algorithm(AA)
-# Definir la matriz AA
 
-# Ejecutar el algoritmo BEA
-CA_resultante = bea_algorithm(aa_matrix)
+# Main program para generar las matrices
+if __name__ == "__main__":
+    # Solicitar matrices de uso y acceso
+    query_attr = solicitar_matriz("de uso")
 
-# Mostrar el resultado
-print("Matriz de afinidad agrupada CA:")
-print(CA_resultante)
+    
+    query_access = solicitar_matriz("de acceso")
+
+    # Solicitar el valor de acceso/ejecución
+    acceso_ejecucion = float(input("\nIngrese el valor de acceso/ejecución: "))
+
+    # Generar la matriz de afinidad
+    aa_matrix = calcular_matriz_afinidad(query_attr, query_access, acceso_ejecucion)
+
+    print("\nMatriz de Afinidad (AA) generada:")
+    print(aa_matrix)
+
+
+    CA_resultante = bea_algorithm(aa_matrix)
+
+    # Mostrar el resultado
+    print("Matriz de afinidad agrupada CA:")
+    print(CA_resultante)
