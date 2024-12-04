@@ -70,6 +70,21 @@ def bea_algorithm(A):
 
     return CA
 
+def reorganizar_filas(CA):
+    n, m = CA.shape
+    orden_columnas = []
+    for j in range(m):
+        col = CA[:, j]
+        for k in range(m):
+            if np.array_equal(col, aa_matrix[:, k]):
+                orden_columnas.append(k)
+                break
+    
+    CA_reorganizada = np.zeros_like(CA)
+    for i, idx in enumerate(orden_columnas):
+        CA_reorganizada[i, :] = CA[idx, :]
+    
+    return CA_reorganizada
 
 # Main program para generar las matrices
 if __name__ == "__main__":
@@ -90,7 +105,14 @@ if __name__ == "__main__":
 
 
     CA_resultante = bea_algorithm(aa_matrix)
-
+    # Reorganizar las filas de CA 
+    CA_resultante_2 = reorganizar_filas(CA_resultante)
     # Mostrar el resultado
     print("Matriz de afinidad agrupada CA:")
     print(CA_resultante)
+
+    # Mostrar el resultado
+    print("Matriz de afinidad agrupada CA reorganizada:")
+    print(CA_resultante_2)
+
+# Codigo correspondiente a G2, Base de datos avanzadas
